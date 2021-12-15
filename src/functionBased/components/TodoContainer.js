@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Header from './Header';
 import InputTodo from './InputTodo';
 import TodosList from './TodosList';
@@ -9,6 +9,12 @@ import NotMatch from '../pages/NotMatch';
 import Navbar from './Navbar';
 
 const TodoContainer = () => {
+  function getInitialTodos() {
+    // getting stored items
+    const temp = localStorage.getItem('todos');
+    const savedTodos = JSON.parse(temp);
+    return savedTodos || [];
+  }
   const [todos, setTodos] = useState(getInitialTodos());
 
   const handleChange = (id) => {
@@ -42,12 +48,25 @@ const TodoContainer = () => {
     setTodos(
       todos.map((todo) => {
         if (todo.id === id) {
-          todo.title = updatedTitle;
+          todo.title = updatedTitle; // eslint-disable-line no-param-reassign
         }
         return todo;
       }),
     );
   };
+
+  const renderRoot = () => (
+    <>
+      <Header />
+      <InputTodo addTodoProps={addTodoItem} />
+      <TodosList
+        todos={todos}
+        handleChangeProps={handleChange}
+        deleteTodoProps={delTodo}
+        setUpdate={setUpdate}
+      />
+    </>
+  );
 
   useEffect(() => {
     // storing todos items
@@ -55,39 +74,19 @@ const TodoContainer = () => {
     localStorage.setItem('todos', temp);
   }, [todos]);
 
-  function getInitialTodos() {
-    // getting stored items
-    const temp = localStorage.getItem('todos');
-    const savedTodos = JSON.parse(temp);
-    return savedTodos || [];
-  }
-
   return (
     <>
       <Navbar />
-      <Switch>
-        <Route path="/">
-          <div className="container">
-            <div className="inner">
-              <Header />
-              <InputTodo addTodoProps={addTodoItem} />
-              <TodosList
-                todos={todos}
-                handleChangeProps={handleChange}
-                deleteTodoProps={delTodo}
-                setUpdate={setUpdate}
-              />
-            </div>
-          </div>
-        </Route>
+      <div className="container">
+        <div className="inner">
+          <Routes>
+            <Route path="/" element={renderRoot()} />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<NotMatch />} />
 
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="*">
-          <NotMatch />
-        </Route>
-      </Switch>
+          </Routes>
+        </div>
+      </div>
     </>
   );
 };
