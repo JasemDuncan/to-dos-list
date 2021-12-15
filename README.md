@@ -1,7 +1,7 @@
 ![](https://img.shields.io/badge/Microverse-blueviolet)
 
 # To Do list with React
-
+![alt text](./todoReact.png)
 ## Built With
 
 - HTML&CSS
@@ -15,7 +15,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Install
 - Open your console and change the current working directory into the destination for this project.
-- Type `git clone git@github.com:JasemDuncan/math-magicians.git`
+- Type `git clone https://github.com/JasemDuncan/to-dos-list.git`
 - Type Enter to finish the installation process.
 ## Authors
 
